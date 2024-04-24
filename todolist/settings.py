@@ -39,11 +39,25 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     
     'API.apps.ApiConfig',
+    'frontend.apps.FrontendConfig',
+    
     'rest_framework',
+    'rest_framework.authtoken',
     'corsheaders',
 ]
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+AUTHENTICATION_BACKENDS = [
+    'API.authentication.EmailBackend',  # Use your actual app name here
+    'django.contrib.auth.backends.ModelBackend',  # Optional: Retain this for admin and other authentications using the username
+]
 
+
+AUTH_USER_MODEL = 'API.USER'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -62,7 +76,9 @@ ROOT_URLCONF = 'todolist.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+                    BASE_DIR / 'templates'
+            ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,6 +141,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

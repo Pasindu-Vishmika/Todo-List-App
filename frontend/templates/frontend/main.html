@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Todo List App</title>
+    
+    <style>
+        body {
+            background: rgb(54, 217, 182);
+            background: Linear-gradient( 90deg, rgba(54,217,182,1) 0%, rgba(32,152,126,1) 43%, rgba(0,212,255,1) 100%);
+        }
+
+        h1,h2,h3,h4,h5,p,span,strike {
+            font-family: "Montserrat" , sans-serif;
+        }
+        
+        #task-container{
+            max-width:600px;
+            margin:0 auto;
+            box-shadow: 0 14px 28px rgba (0,0,0,0.25) , 0 10px rgba (0,0,0,0.22);
+            background-color: #fff;
+            margin-top: 100px;
+            margin:100px;
+            justify-content : space-arround;
+            align-items:flex-start;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        
+        <div id="task-container">
+            <div id="form-wrapper">
+                <form id="form">
+                    <div class="flex-wrapper">
+                        <div style="flex: 6">
+                            <input id="title" class"form-control" type ="text" name="title" placeholde="Add task">
+                        </div>
+                        <div style="flex: 1">
+                            <input id="submit" class="btn" type="submit" >
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+            <div id="list-wrapper">
+            
+            |</div>
+        </div>
+        
+    </div>
+        
+
+</body>
+
+<script>
+    var wrapper = document.getElementById('list-wrapper'); // Fixed the variable declaration
+    let url = "http://127.0.0.1:8000/api/task-list/"
+    fetch(url)
+        .then(response => response.json())
+        .then(function(data) { // Fixed the spelling of 'function'
+            console.log('Data:', data);
+
+            let list = data;
+            for (let i in list) {
+                let item = `
+                    <div id="data-row-${i}" class='task-wrapper flex-wrapper'>
+                        <div style='flex:7'>
+                            <span class="title"> 
+                                ${list[i].title}
+                            </span>
+                        </div>
+                        <div style ="flex:1">
+                            <button class "btn btn-sm btn-outline-info edit"> Edit </button> 
+                        </div>
+                        <div style ="flex:1">
+                            <button class "btn btn-sm btn-outline-dark delete"> delete </button>
+                        </div>
+                    </div>
+                `;
+                wrapper.innerHTML += item;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+        {% comment %} function createTask () {
+
+        }
+        let form = document.getElementById("form-wrapper")
+        form.addEventListener('submit' , function(e){
+            e.preventDefault()
+            console.log('Form Submited')
+            let url ="http://127.0.0.1:8000/api/task-create/";
+            let title =  document.getElementById("title")
+            
+     
+            fetch (url, {
+                method :"POST",
+                headers:{
+                    'contetnt-type':'applicatiob/json',
+                }
+                body:JSON.stringify({'title':title})
+            })
+        }) {% endcomment %}
+</script>
+
+</html>
