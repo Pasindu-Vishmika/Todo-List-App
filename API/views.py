@@ -5,7 +5,10 @@ from rest_framework import status
 from .models import Task 
 from .serializer import TaskSerializer
 from django.contrib.auth.models import User
-
+from django.contrib.auth import authenticate ,login , logout
+from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.decorators import login_required
 
 
 @api_view(['GET'])
@@ -75,3 +78,54 @@ def deleteTask (request, pk):
         return Response('Task deleted successfully')
     except Task.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
+    
+@login_required(login_url='login')   
+def home(request):
+    return render (request , 'frontend/main.html')
+
+def LogingPage(request):
+    page = "login"
+    if request.user.is_authenticated:
+        return redirect ("home")
+    
+    if request.method=="POST":
+        username = request.POST.get('username').lower()
+        password = request.POST.get('password')
+        
+        try:
+            user = User.objects.get(username=username)
+        except:
+            messages.error(request , "User Not Found")
+            
+        user = authenticate(request, username=username , password =password)
+        
+        if user is not None :
+            login(request,user)
+            return redirect ('home')
+        else:
+            messages.error(request,"incorrect username or password")
+            
+    context = {'page':page}
+    return render (request , "frontend/loging_register.html",context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect ('login')
+
+
+def registerUser(request):
+    if request.user.is_authenticated:
+        return redirect ("home")
+    form = UserCreationForm()
+    context = {'page':'register','form':form}
+    
+    if request.method=="POST":
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.username = user.username.lower()
+            user.save()
+            return redirect ('login')
+        else:
+            messages.error(request,"An error has occured during registration")
+    return render (request,'frontend/loging_register.html',context)

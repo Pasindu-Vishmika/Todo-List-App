@@ -11,5 +11,10 @@ urlpatterns = [
     path ('task-create/', views.createTask, name='task-create'),
     path ('task-update/<str:pk>/', views.updateTask, name='task-update'),
     path ('task-delete/<str:pk>/', views.deleteTask, name='task-delete'),
+    
+    path ("home/",views.home, name ="home"),
+    path ("login/",views.LogingPage, name ="login"),
+    path ('register/', views.registerUser , name = 'register'),
+    path ("logout/", views.logoutUser , name ='logout'),
 
 ]
