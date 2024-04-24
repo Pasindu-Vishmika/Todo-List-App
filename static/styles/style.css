@@ -4,6 +4,36 @@
   font-family: "Montserrat", sans-serif !important;
 }
 
+.signout{
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  text-decoration: none;
+  display: block;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 0 10px #0007 ;
+}
+
+.uname{
+  position: fixed;
+  top: 10px;
+  right: 40px;
+  width: 150px;
+  height: 30px;
+  display: flex;
+  border-bottom-left-radius: 50px;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+  box-shadow: 0 0 10px #0007 ;
+}
+
 body {
     background: linear-gradient(to right , #d6090980, #04ce3780);
     height: 100vh;
