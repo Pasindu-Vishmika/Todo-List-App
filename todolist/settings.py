@@ -46,18 +46,6 @@ INSTALLED_APPS = [
     'corsheaders',
 ]
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-}
-AUTHENTICATION_BACKENDS = [
-    'API.authentication.EmailBackend',  # Use your actual app name here
-    'django.contrib.auth.backends.ModelBackend',  # Optional: Retain this for admin and other authentications using the username
-]
-
-
-AUTH_USER_MODEL = 'API.USER'
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -141,6 +129,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 STATIC_URL = 'static/'
+#STATIC_ROOT = BASE_DIR / 'static'
+STATICFILES_DIRS = [
+    BASE_DIR / 'static',
+]
 
 
 # Default primary key field type
