@@ -1,12 +1,10 @@
-from django.http import  JsonResponse , HttpResponse
-from django.shortcuts import render
-
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework import status
 from .models import Task
 from .serializer import TaskSerializer
 
-# Create your views here.
+
 
 
 @api_view(['GET'])
@@ -26,11 +24,54 @@ def getTaskList (request):
     serializer = TaskSerializer(tasks, many=True)
     return Response (serializer.data)
 
+
 @api_view(['GET'])
 def getTask (request,pk):
-    tasks = Task.objects.get(id=pk)
-    serializer = TaskSerializer(tasks , many=False)
-    return Response (serializer.data)
+    try:
+        task = Task.objects.get(id=pk)
+        serializer = TaskSerializer(task , many=False)
+        return Response (serializer.data)
+    except Task.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
-def createTask (request):
-    return Response ('create')
+
+
+@api_view(['POST'])
+def createTask(request):
+    serializer = TaskSerializer(data=request.data)
+    
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+@api_view(['GET', 'PUT', 'PATCH'])
+def updateTask(request, pk):
+    try:
+        task = Task.objects.get(pk=pk)
+    except Task.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = TaskSerializer(task)
+        return Response(serializer.data)
+
+    elif request.method in ('PUT', 'PATCH'):
+        partial = request.method == 'PATCH'  # True for PATCH requests
+        serializer = TaskSerializer(task, data=request.data, partial=partial)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def deleteTask (request, pk):
+    try:
+        task = Task.objects.get(id=pk)
+        task.delete()
+        return Response('Task deleted successfully')
+    except Task.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
