@@ -1,5 +1,12 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User , AbstractUser
+
+class User (AbstractUser):
+    name = models.CharField(max_length=200,null=True)
+    email = models.EmailField(unique=True)
+    
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS =[]
 
 class Task(models.Model):
     host = models.ForeignKey(User , on_delete = models.SET_NULL,null =True)

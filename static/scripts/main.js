@@ -18,31 +18,32 @@ function getCookie(name) {
  const BASE_URL = 'http://127.0.0.1:8000/api';
 
  $('#add-todo').show();
-        $('#edit-todo').hide();
+ $('#edit-todo').hide();
 
- function loadTaskList(){
-    fetch(BASE_URL + '/task-list/')
-    .then((response) => response.json())
-    .then((data) => {
-        console.log(data);
+    function loadTaskList() {
 
-        let item_wrap = document.getElementById('item-wrap');
-        item_wrap.innerHTML = '';  
-        var htmlData = ''; 
-        data.forEach((item) => {
-            var check = item.completed ? 'checked' : '';
-            htmlData += `
-            <div class="item">
-                <input type="checkbox" ${check} onchange="updateState(this)" data-id="${item.id}" >
-                <div class="title" onclick="setModalData(${item.id})" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">${item.title}</div>
-                <div class="icon-1" onclick="setUpdateData(${item.id})"><i class="bi bi-pencil-square"></i></div>
-                <div class="icon-2" onclick="confirmation(${item.id})"><i class="bi bi-trash-fill"></i></div>
-            </div>`;
-        });
-        item_wrap.innerHTML = htmlData;
-    });
- }
-
+       
+            fetch(BASE_URL + '/task-list/'+user_id+'/')
+            .then((response) => response.json())
+            .then((data) => {
+               // console.log(data);
+                let item_wrap = document.getElementById('item-wrap');
+                item_wrap.innerHTML = '';  
+                var htmlData = ''; 
+                data.forEach((item) => {
+                    var check = item.completed ? 'checked' : '';
+                    htmlData += `
+                    <div class="item">
+                        <input type="checkbox" ${check} onchange="updateState(this)" data-id="${item.id}" >
+                        <div class="title" onclick="setModalData(${item.id})" data-bs-toggle="modal" data-bs-target="#exampleModal" type="button">${item.title}</div>
+                        <div class="icon-1" onclick="setUpdateData(${item.id})"><i class="bi bi-pencil-square"></i></div>
+                        <div class="icon-2" onclick="confirmation(${item.id})"><i class="bi bi-trash-fill"></i></div>
+                    </div>`;
+                });
+                item_wrap.innerHTML = htmlData;
+            });
+        }
+        
  loadTaskList();
 
  function addNewListItem(){
@@ -58,6 +59,7 @@ function getCookie(name) {
         body: JSON.stringify({
             'title': title,
             'description': description,
+            'userId': user_id  // Include the user ID in the request body
         })
     })
     .then((response) => console.log(response))
@@ -67,7 +69,7 @@ function getCookie(name) {
         $('#title').val('');
         $('#description').val('');
     });
- }
+}
 
 function confirmation(id){
     Swal.fire({

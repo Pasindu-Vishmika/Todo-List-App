@@ -2,12 +2,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from rest_framework.decorators import api_view 
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Task 
+from .models import Task , User
 from .serializer import TaskSerializer
-from django.contrib.auth.models import User
 from django.contrib.auth import authenticate ,login , logout
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from .forms import UserRegisterForm , UserForm , TaskForm
 from django.contrib.auth.decorators import login_required
 
 
@@ -23,8 +22,8 @@ def getRoutes(request):
     return Response(routes)
 
 @api_view(['GET'])
-def getTaskList(request):
-    tasks = Task.objects.all().order_by('-created')
+def getTaskList(request, pk=1):
+    tasks = Task.objects.filter(host=pk).order_by('-created')
     serializer = TaskSerializer(tasks, many=True)
     return Response(serializer.data)
 
@@ -44,7 +43,7 @@ def getTask (request,pk):
 def createTask(request):
     serializer = TaskSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        task = serializer.save(host=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -113,19 +112,20 @@ def logoutUser(request):
     return redirect ('login')
 
 
+
 def registerUser(request):
     if request.user.is_authenticated:
-        return redirect ("home")
-    form = UserCreationForm()
-    context = {'page':'register','form':form}
-    
-    if request.method=="POST":
-        form = UserCreationForm(request.POST)
+        return redirect("home")
+
+    form = UserRegisterForm()
+
+    if request.method == "POST":
+        form = UserRegisterForm(request.POST)
         if form.is_valid():
-            user = form.save(commit=False)
-            user.username = user.username.lower()
-            user.save()
-            return redirect ('login')
+            form.save()
+            return redirect('login')
         else:
-            messages.error(request,"An error has occured during registration")
-    return render (request,'frontend/loging_register.html',context)
+            messages.error(request, "An error has occurred during registration")
+
+    context = {'page': 'register', 'form': form}
+    return render(request, 'frontend/loging_register.html', context)

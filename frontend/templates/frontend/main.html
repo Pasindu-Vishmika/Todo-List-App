@@ -22,7 +22,10 @@
 <body>
 {% block content %}
 
-<div class="uname">@{{request.user.username}} </div>
+<div class="uname"><small>@</small>{{request.user.username}} </div>
+<script>
+const user_id = "{{request.user.id}}"; 
+</script>
 <a class="signout" href="{% url "logout" %}"><i class="bi bi-box-arrow-left"></i></a>
    <div class="container">
       <div class="row">
