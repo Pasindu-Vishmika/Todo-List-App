@@ -3,7 +3,7 @@
 1. Clone the repository to your local machine:
 
     ```bash
-    git clone https://github.com/Pasindu-Vishmika/Todo-List-App-LYXUX-LTD.git
+    git clone https://github.com/Pasindu-Vishmika/Todo-List-App.git
     ```
 
 2. Install the necessary dependencies, such as PIL (Python Imaging Library). You can install dependencies using pip:
