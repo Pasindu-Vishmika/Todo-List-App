@@ -16,7 +16,7 @@
     ```
 3. Go to Project Dir 
     ```bash
-    cd Todo-List-App-LYXUX-LTD
+    cd Todo-List-App
     ```
 
 4. Use this Command to activate Server  
