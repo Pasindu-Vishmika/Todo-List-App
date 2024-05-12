@@ -9,7 +9,7 @@ class User (AbstractUser):
     REQUIRED_FIELDS =[]
 
 class Task(models.Model):
-    host = models.ForeignKey(User , on_delete = models.SET_NULL,null =True)
+    host = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     completed = models.BooleanField(default=False)

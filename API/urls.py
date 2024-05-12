@@ -15,5 +15,6 @@ urlpatterns = [
     path ("login/",views.LogingPage, name ="login"),
     path ('register/', views.registerUser , name = 'register'),
     path ("logout/", views.logoutUser , name ='logout'),
+    
 
 ]
